@@ -1,6 +1,7 @@
 
 package com.bridgelabz;
 
+import java.io.FileWriter;
 import java.util.Scanner;
 
 import java.io.File;
@@ -31,56 +32,28 @@ class EmployeePayrollService {
         String fileName = employee.getName() + ".txt";
         File directory = new File(directoryName);
 
-        // Check if directory exists
-        if (directory.exists()) {
-            System.out.println("Directory " + directoryName + " already exists.");
-        } else {
-            // Create directory
-            if (directory.mkdir()) {
-                System.out.println("Directory " + directoryName + " created.");
-            } else {
-                System.out.println("Failed to create directory " + directoryName);
-            }
+        if(!directory.exists()){
+            directory.mkdir();
         }
 
         File file = new File(directoryName + "/" + fileName);
+        FileWriter fw = new FileWriter(file);
+        fw.write(employee.getId() + "," + employee.getName() + "," + employee.getSalary());
+        fw.close();
 
-        // Check if file exists
+        int count = 0;
         if (file.exists()) {
-            System.out.println("File " + fileName + " already exists.");
+            Scanner fileScanner = new Scanner(file);
+            while (fileScanner.hasNextLine()) {
+                count++;
+                fileScanner.nextLine();
+            }
+            System.out.println("Number of entries in file: " + count);
+            fileScanner.close();
         } else {
-            // Create empty file
-            if (file.createNewFile()) {
-                System.out.println("File " + fileName + " created.");
-            } else {
-                System.out.println("Failed to create file " + fileName);
-            }
-        }
-
-        // Delete file and check if it doesn't exist
-        if (file.delete()) {
-            if (!file.exists()) {
-                System.out.println("File " + fileName + " deleted and no longer exists.");
-            }
-        } else {
-            System.out.println("Failed to delete file " + fileName);
-        }
-
-        // List files and directories
-        File[] files = directory.listFiles();
-        if (files != null) {
-            for (File f : files) {
-                System.out.println(f.getName());
-            }
-        }
-
-        // List files with a specific extension
-        String extension = "txt";
-        for (File f : files) {
-            if (f.getName().endsWith("." + extension)) {
-                System.out.println(f.getName());
-            }
+            System.out.println("File does not exist");
         }
     }
+
 
 }
