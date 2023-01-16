@@ -42,18 +42,25 @@ class EmployeePayrollService {
         fw.close();
 
         int count = 0;
+        double totalSalary = 0;
         if (file.exists()) {
             Scanner fileScanner = new Scanner(file);
             while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine();
+                String[] fields = line.split(",");
+                 id = Integer.parseInt(fields[0]);
+                 name = fields[1];
+                 salary = Double.parseDouble(fields[2]);
+                totalSalary += salary;
                 count++;
-                fileScanner.nextLine();
             }
+            double averageSalary = totalSalary / count;
             System.out.println("Number of entries in file: " + count);
+            System.out.println("Average salary: " + averageSalary);
             fileScanner.close();
         } else {
             System.out.println("File does not exist");
         }
     }
-
 
 }
